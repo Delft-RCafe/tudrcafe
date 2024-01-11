@@ -1,4 +1,6 @@
-
+#' Extract information on upcoming sessions
+#' @param url string. Give the url for the R Cafe website.
+#' @param session_no integer. The number of the upcoming session. 1 = first, 2 = second, etc.
 #' @export
 upcoming_session <- function(url = "https://delft-rcafe.github.io/home", session_no = 1){
 
