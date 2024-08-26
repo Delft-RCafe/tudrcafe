@@ -1,24 +1,14 @@
 #' Extract information on upcoming sessions
-#' @param url string. Give the url for the R Cafe website.
-#' @param session_no integer. The number of the upcoming session. 1 = first, 2 = second, etc.
+#' @param n integer. Number of sessions to show. Default is to show all upcoming sessions. n = 1 will show the next session.
 #' @export
-upcoming_session <- function(url = "https://delft-rcafe.github.io/home", session_no = 1){
+upcoming_sessions <- function(n = NULL){
 
-  session_no_conv <- session_no + 1
-  upcoming <- url |>
-    rvest::read_html() |>
-    rvest::html_element(paste0("div.callout:nth-child(", session_no_conv, ")")) |>
-    rvest::html_text2()
+  current_date <- Sys.Date()
+  sched <- retrieve_schedule()
 
-  upcoming_tbl <- upcoming |>
-    tibble::as_tibble() |>
-    dplyr::mutate(
-      topic = stringr::str_extract(value, ".*(?=\\n)"),
-      date = stringr::str_extract(value, "(?<=Date: ).*"),
-      time = stringr::str_extract(value, "(?<=Time: ).*"),
-      location = stringr::str_extract(value, "(?<=Place: ).*")
-    ) |>
-    dplyr::select(!value)
-
-  return(upcoming_tbl)
+  upcoming <- dplyr::filter(sched, date > current_date)
+  if(!is.null(n)){
+    upcoming <- dplyr::slice_head(upcoming, n = n)
+  }
+  return(upcoming)
 }
