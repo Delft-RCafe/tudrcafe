@@ -24,8 +24,8 @@ parse_schedule <- function(schedule){
       month_abbrev = month.abb[month],
       year = lubridate::year(date),
       wday = weekdays(date),
-      dtstart = calendar::ic_char_datetime(ymd_hm(paste(date, start_time), tz = "Europe/Amsterdam")),
-      dtend <- calendar::ic_char_datetime(ymd_hm(paste(date, end_time), tz = "Europe/Amsterdam"))
+      dtstart = calendar::ic_char_datetime(lubridate::ymd_hm(paste(date, start_time), tz = "Europe/Amsterdam")),
+      dtend <- calendar::ic_char_datetime(lubridate::ymd_hm(paste(date, end_time), tz = "Europe/Amsterdam"))
     )
 }
 
