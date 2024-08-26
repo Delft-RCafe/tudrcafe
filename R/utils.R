@@ -1,6 +1,7 @@
 #' Retrieve R Cafe schedule
 
 retrieve_schedule <- function(){
+  googlesheets4::gs4_deauth()
   schedule_url <- "https://docs.google.com/spreadsheets/d/1TyC3bBiVvtWF4UtacC1Ccwa3L99Xig2jxtmDwIHXXNY"
   schedule <- googlesheets4::read_sheet(schedule_url)
   return(schedule)
