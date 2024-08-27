@@ -25,7 +25,7 @@ parse_schedule <- function(schedule){
       year = lubridate::year(date),
       wday = weekdays(date),
       dtstart = calendar::ic_char_datetime(lubridate::ymd_hm(paste(date, start_time), tz = "Europe/Amsterdam")),
-      dtend <- calendar::ic_char_datetime(lubridate::ymd_hm(paste(date, end_time), tz = "Europe/Amsterdam"))
+      dtend = calendar::ic_char_datetime(lubridate::ymd_hm(paste(date, end_time), tz = "Europe/Amsterdam"))
     )
 }
 
@@ -72,33 +72,49 @@ create_ical <- function(session, path){
 }
 
 
-update_poster <- function() {
-  poster <- magick::image_read('inst/poster_template.png')
+update_poster <- function(session) {
 
-  poster <- magick::image_annotate(poster, "SEPTEMBER MEET-UP", size = 65, color = "#00A6D6",
-                           weight = 700, font = 'mono', location = "+1200+100") |>
-    magick::image_annotate("Data jam: collaborate",
+  template_path <- system.file("poster_template.png", package = 'tudrcafe')
+
+  poster <- magick::image_read(template_path)
+  description <- session$poster_line |>
+    stringr::str_wrap(21) |>
+    stringr::str_split('\n') |>
+    unlist()
+
+  poster_date <- paste(session$wday, session$day, session$month_name)
+  poster_time <- paste(session$start_time, "-", session$end_time)
+  poster_location <-session$location
+  poster_title <- paste0(toupper(session$month_name)," MEET-UP")
+  outfile <- paste0("R_cafe_",session$month_abbrev, session$year,".png")
+
+
+  poster <- magick::image_annotate(poster, poster_title, size = 65,
+                                   color = "#00A6D6", weight = 700,
+                                   font = 'mono', location = "+1200+100")
+
+  for (i in 1:length(description)) {
+
+    y_loc = 150 + 50*i
+
+    loc_string = paste0("+1250+",y_loc)
+
+    poster <- magick::image_annotate(poster, description[i],
                    size = 45, color = "#FFF", weight = 600, font = 'mono',
-                   location = "+1250+200") |>
-    magick::image_annotate("on real-world data from",
-                   size = 45, color = "#FFF", weight = 600, font = 'mono',
-                   location = "+1250+250") |>
-    magick::image_annotate("#tidytuesday",
-                   size = 45, color = "#FFF", weight = 600, font = 'mono',
-                   location = "+1250+300")  |>
+                   location = loc_string)
+  }
 
-    magick::image_annotate("'Thursday 12 Sep 2024'",
-                   size = 30, color = "#FFF", weight = 600, font = 'mono',
-                   location = "+1370+760")  |>
+    poster <- magick::image_annotate(poster, paste0("'", poster_date, "'"),
+                                     size = 30, color = "#FFF", weight = 600,
+                                     font = 'mono', location = "+1370+760") |>
 
-    magick::image_annotate("'15:00 - 16:30 CEST'",
-                   size = 30, color = "#FFF", weight = 600, font = 'mono',
-                   location = "+1370+840")  |>
+      magick::image_annotate(paste0("'", poster_time, "'"),
+                             size = 30, color = "#FFF", weight = 600, font = 'mono',
+                             location = "+1370+840")  |>
+      magick::image_annotate(paste0("'", poster_location, "'"),
+                             size = 30, color = "#FFF", weight = 600, font = 'mono',
+                             location = "+1370+920")
 
-    magick::image_annotate("'Library, Albert Einstein'",
-                   size = 30, color = "#FFF", weight = 600, font = 'mono',
-                   location = "+1370+920")
-
-  magick::image_write(poster, path = "poster.png", format = "png")
+  magick::image_write(poster, path = outfile, format = "png")
 
 }
