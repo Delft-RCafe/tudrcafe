@@ -70,3 +70,35 @@ create_ical <- function(session, path){
   )
   write(ical_output, path)
 }
+
+
+update_poster <- function() {
+  poster <- magick::image_read('inst/poster_template.png')
+
+  poster <- magick::image_annotate(poster, "SEPTEMBER MEET-UP", size = 65, color = "#00A6D6",
+                           weight = 700, font = 'mono', location = "+1200+100") |>
+    magick::image_annotate("Data jam: collaborate",
+                   size = 45, color = "#FFF", weight = 600, font = 'mono',
+                   location = "+1250+200") |>
+    magick::image_annotate("on real-world data from",
+                   size = 45, color = "#FFF", weight = 600, font = 'mono',
+                   location = "+1250+250") |>
+    magick::image_annotate("#tidytuesday",
+                   size = 45, color = "#FFF", weight = 600, font = 'mono',
+                   location = "+1250+300")  |>
+
+    magick::image_annotate("'Thursday 12 Sep 2024'",
+                   size = 30, color = "#FFF", weight = 600, font = 'mono',
+                   location = "+1370+760")  |>
+
+    magick::image_annotate("'15:00 - 16:30 CEST'",
+                   size = 30, color = "#FFF", weight = 600, font = 'mono',
+                   location = "+1370+840")  |>
+
+    magick::image_annotate("'Library, Albert Einstein'",
+                   size = 30, color = "#FFF", weight = 600, font = 'mono',
+                   location = "+1370+920")
+
+  magick::image_write(poster, path = "poster.png", format = "png")
+
+}
