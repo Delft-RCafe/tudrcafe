@@ -25,7 +25,7 @@ parse_schedule <- function(schedule){
       year = lubridate::year(date),
       wday = weekdays(date),
       dtstart = calendar::ic_char_datetime(lubridate::ymd_hm(paste(date, start_time), tz = "Europe/Amsterdam")),
-      dtend <- calendar::ic_char_datetime(lubridate::ymd_hm(paste(date, end_time), tz = "Europe/Amsterdam"))
+      dtend = calendar::ic_char_datetime(lubridate::ymd_hm(paste(date, end_time), tz = "Europe/Amsterdam"))
     )
 }
 
@@ -36,9 +36,9 @@ create_description <- function(session){
     session$month_name, ", ",
     session$location,
     if(!is.na(session$presenter)) {
-      paste0(". ", session$presenter, " will talk about ", session$theme, ".") # what if session with no presenter??
+      paste0(". ", session$presenter, " will present session: ", session$theme, ".") # what if session with no presenter??
     } else {
-      paste0(".")
+      paste0(". Session theme: ", session$theme)
     }
   )
   return(out)
