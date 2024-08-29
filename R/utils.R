@@ -74,7 +74,7 @@ create_ical <- function(session, path){
 
 update_poster <- function(session) {
 
-  template_path <- system.file("poster_template.png", package = 'tudrcafe')
+  template_path <- system.file("poster_template.png", package = 'tudrcafe', out_path = "")
 
   poster <- magick::image_read(template_path)
   description <- session$poster_line |>
@@ -86,7 +86,7 @@ update_poster <- function(session) {
   poster_time <- paste(session$start_time, "-", session$end_time)
   poster_location <-session$location
   poster_title <- paste0(toupper(session$month_name)," MEET-UP")
-  outfile <- paste0("R_cafe_",session$month_abbrev, session$year,".png")
+  outfile <- paste0(out_path,"R_cafe_",session$month_abbrev, session$year,".png")
 
 
   poster <- magick::image_annotate(poster, poster_title, size = 65,
