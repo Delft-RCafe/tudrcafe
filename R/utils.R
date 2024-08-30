@@ -72,9 +72,9 @@ create_ical <- function(session, path){
 }
 
 
-update_poster <- function(session) {
+update_poster <- function(session, out_path = ".") {
 
-  template_path <- system.file("poster_template.png", package = 'tudrcafe', out_path = "")
+  template_path <- system.file("poster_template.png", package = 'tudrcafe')
 
   poster <- magick::image_read(template_path)
   description <- session$poster_line |>
