@@ -15,6 +15,7 @@ Imports:
     glue,
     googlesheets4,
     lubridate,
+    magick,
     stringr
 Suggests: 
     testthat (>= 3.0.0)

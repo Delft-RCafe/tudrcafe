@@ -70,3 +70,51 @@ create_ical <- function(session, path){
   )
   write(ical_output, path)
 }
+
+
+update_poster <- function(session, out_path = "") {
+
+  template_path <- system.file("poster_template.png", package = 'tudrcafe')
+
+  poster <- magick::image_read(template_path)
+  description <- session$poster_line |>
+    stringr::str_wrap(21) |>
+    stringr::str_split('\n') |>
+    unlist()
+
+  poster_date <- paste(session$wday, session$day, session$month_name)
+  poster_time <- paste(session$start_time, "-", session$end_time)
+  poster_location <-session$location
+  poster_title <- paste0(toupper(session$month_name)," MEET-UP")
+  outfile <- paste0(out_path,"R_cafe_",session$month_abbrev, session$year,".png")
+
+
+  poster <- magick::image_annotate(poster, poster_title, size = 65,
+                                   color = "#00A6D6", weight = 700,
+                                   font = 'mono', location = "+1200+100")
+
+  for (i in 1:length(description)) {
+
+    y_loc = 150 + 50*i
+
+    loc_string = paste0("+1250+",y_loc)
+
+    poster <- magick::image_annotate(poster, description[i],
+                   size = 45, color = "#FFF", weight = 600, font = 'mono',
+                   location = loc_string)
+  }
+
+    poster <- magick::image_annotate(poster, paste0("'", poster_date, "'"),
+                                     size = 30, color = "#FFF", weight = 600,
+                                     font = 'mono', location = "+1370+760") |>
+
+      magick::image_annotate(paste0("'", poster_time, "'"),
+                             size = 30, color = "#FFF", weight = 600, font = 'mono',
+                             location = "+1370+840")  |>
+      magick::image_annotate(paste0("'", poster_location, "'"),
+                             size = 30, color = "#FFF", weight = 600, font = 'mono',
+                             location = "+1370+920")
+
+  magick::image_write(poster, path = outfile, format = "png")
+
+}
