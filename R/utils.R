@@ -72,7 +72,7 @@ create_ical <- function(session, path){
 }
 
 
-update_poster <- function(session, out_path = ".") {
+update_poster <- function(session, out_path = "") {
 
   template_path <- system.file("poster_template.png", package = 'tudrcafe')
 
