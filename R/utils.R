@@ -36,13 +36,20 @@ create_description <- function(session){
     session$month_name, ", ",
     session$location,
     if(!is.na(session$presenter)) {
-      paste0(". ", session$presenter, " will present session: ", session$theme, ".") # what if session with no presenter??
+      paste0(". ", session$presenter, " will present session: ",
+             session$theme, ".") # what if session with no presenter??
     } else {
       paste0(". Session theme: ", session$theme)
     }
   )
   return(out)
 }
+
+#' Create a Outlook calendar invite
+#' @param session dataframe. A single row from  the sessions dataset,
+#' describing a one session instance.
+#' @param path string. Path to file, where the session should be stored
+#' @export
 
 create_ical <- function(session, path){
   ical_uid <- calendar::ic_guid()
@@ -71,6 +78,11 @@ create_ical <- function(session, path){
   write(ical_output, path)
 }
 
+#' Create or update poster
+#' @param session dataframe. A single row from  the sessions dataset,
+#' describing a one session instance.
+#' @param out_path string. Path to file, where the session should be stored
+#' @export
 
 update_poster <- function(session, out_path = "") {
 
