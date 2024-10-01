@@ -40,6 +40,9 @@ create_description <- function(session){
              session$theme, ".") # what if session with no presenter??
     } else {
       paste0(". Session theme: ", session$theme)
+    },
+    if(!is.na(session$registration)) {
+      paste0("\n Register to join the meeting: ", session$registration )
     }
   )
   return(out)
